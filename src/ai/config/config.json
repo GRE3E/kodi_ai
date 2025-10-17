@@ -1,0 +1,14 @@
+{
+  "assistant_name": "KODI",
+  "language": "es",
+  "model": {
+    "name": "qwen2.5:3b-instruct",
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "repeat_penalty": 1.1,
+    "num_ctx": 8192,
+    "max_tokens": 1024
+  },
+  "timezone": "America/Bogota"
+}
