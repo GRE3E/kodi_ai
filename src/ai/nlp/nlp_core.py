@@ -154,7 +154,7 @@ class NLPModule:
                         logger.info(f"Recomendación {recommendation_id} actualizada a aceptada=true")
                         
                         agenda_api_url = "http://localhost:3001/api/agenda"
-                        scheduled_at = (datetime.now() + timedelta(days=1)).isoformat()
+                        scheduled_at = (datetime.now() + timedelta(days=1)).isoformat() + "Z"
                         agenda_payload = {
                             "userId": str(userId),
                             "destinationId": last_recommendation["destinationId"],
