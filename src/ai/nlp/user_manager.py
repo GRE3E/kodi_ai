@@ -131,8 +131,23 @@ class UserManager:
                         dynamic_preferences_str.append(f"preferencia_precio: {first_preference['precio']}")
                         dynamic_preferences_dict["preferencia_precio"] = first_preference['precio']
                     if first_preference.get("unliked"):
-                        dynamic_preferences_str.append(f"no_le_gusta: {first_preference['unliked']}")
-                        dynamic_preferences_dict["no_le_gusta"] = first_preference['unliked']
+                        # Procesar los subcampos avanzados de preferencias
+                        unliked_data = first_preference["unliked"]
+                        if isinstance(unliked_data, str):
+                            try:
+                                unliked_data = json.loads(unliked_data)
+                            except Exception:
+                                pass
+                        if isinstance(unliked_data, dict):
+                            for key in [
+                                "travelerTypes", "travelingWith", "travelDuration", "activities", "placeTypes", "budget", "transport"
+                            ]:
+                                if key in unliked_data:
+                                    dynamic_preferences_str.append(f"{key}: {unliked_data[key]}")
+                                    dynamic_preferences_dict[key] = unliked_data[key]
+                        else:
+                            dynamic_preferences_str.append(f"no_le_gusta: {unliked_data}")
+                            dynamic_preferences_dict["no_le_gusta"] = unliked_data
                     if first_preference.get("interestType"):
                         dynamic_preferences_str.append(f"tipo_interes: {first_preference['interestType']}")
                         dynamic_preferences_dict["tipo_interes"] = first_preference['interestType']

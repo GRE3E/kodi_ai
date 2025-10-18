@@ -60,9 +60,13 @@ def create_system_prompt(
     current_time: str,
     current_location: str,
     available_destinations: list,
-    tipo_interes: Any = None,
-    duracion_preferida: Any = None,
-    enfoque_geografico: Any = None,
+    travelerTypes: Any = None,
+    travelingWith: Any = None,
+    travelDuration: Any = None,
+    activities: Any = None,
+    placeTypes: Any = None,
+    budget: Any = None,
+    transport: Any = None,
 ) -> str:
     """
     Crea el system_prompt y el prompt_text para Ollama.
@@ -74,8 +78,6 @@ def create_system_prompt(
     current_date_formatted = format_date_human_readable(current_full_datetime)
     current_time_formatted = format_time_only(current_full_datetime)
     current_country = get_country_from_timezone(timezone_str)
-
-    # Se ha eliminado el código de historial de conversación
 
     system_prompt_template = load_system_prompt_template()
     
@@ -96,9 +98,13 @@ def create_system_prompt(
         no_le_gusta=_safe_format_value(no_le_gusta),
         preferencia_precio=_safe_format_value(user_budget),
         available_destinations=_safe_format_value(available_destinations),
-        tipo_interes=_safe_format_value(tipo_interes),
-        duracion_preferida=_safe_format_value(duracion_preferida),
-        enfoque_geografico=_safe_format_value(enfoque_geografico),
+        travelerTypes=_safe_format_value(travelerTypes),
+        travelingWith=_safe_format_value(travelingWith),
+        travelDuration=_safe_format_value(travelDuration),
+        activities=_safe_format_value(activities),
+        placeTypes=_safe_format_value(placeTypes),
+        budget=_safe_format_value(budget),
+        transport=_safe_format_value(transport),
     )
     
     return system_prompt

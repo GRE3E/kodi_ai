@@ -42,10 +42,14 @@ sections:
     Presupuesto: {preferencia_precio}
     Preferencias:
     - Categoría favorita: {categoria_favorita}
-    - Tipo de interés: {tipo_interes}
     - No le gusta: {no_le_gusta}
-    - Duración preferida: {duracion_preferida}
-    - Región: {enfoque_geografico}
+    - Tipo de viajero: {travelerTypes}
+    - Viaja con: {travelingWith}
+    - Duración de viaje: {travelDuration}
+    - Actividades: {activities}
+    - Tipo de lugar: {placeTypes}
+    - Presupuesto específico: {budget}
+    - Transporte preferido: {transport}
 
     Ubicación actual: {current_country}
     Fecha: {current_date}

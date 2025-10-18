@@ -244,9 +244,13 @@ class NLPModule:
             current_time=current_time,
             current_location=current_location,
             available_destinations=available_destinations,
-            tipo_interes=user_preferences_dict.get("tipo_interes"),
-            duracion_preferida=user_preferences_dict.get("duracion_preferida"),
-            enfoque_geografico=user_preferences_dict.get("enfoque_geografico"),
+            travelerTypes=user_preferences_dict.get("travelerTypes"),
+            travelingWith=user_preferences_dict.get("travelingWith"),
+            travelDuration=user_preferences_dict.get("travelDuration"),
+            activities=user_preferences_dict.get("activities"),
+            placeTypes=user_preferences_dict.get("placeTypes"),
+            budget=user_preferences_dict.get("budget"),
+            transport=user_preferences_dict.get("transport"),
         )
 
         for attempt in range(retries):
