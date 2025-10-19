@@ -41,12 +41,23 @@ Es un asistente virtual diseñado para ayudar a los turistas a planificar sus vi
 
 5.  **El sistema utiliza la variable de entorno OLLAMA_OPTIONS para configurar los parámetros del modelo de NLP:**
 
-    ```json
-    {
-        "temperature": 0.7,     # Control de creatividad (0.0 - 1.0)
-        "num_predict": 500      # Máximo de tokens a generar
-    }
-    ```
+        ```json
+        {
+        "assistant_name": "KODI",
+        "language": "es",
+        "model": {
+            "name": "qwen2.5:3b-instruct",
+            "temperature": 0.3,
+            "top_p": 0.9,
+            "top_k": 40,
+            "repeat_penalty": 1.1,
+            "num_ctx": 8192,
+            "max_tokens": 1024
+        },
+        "timezone": "America/Bogota"
+        }
+
+        ```
 
 ## Uso
 
@@ -77,9 +88,6 @@ Respuesta:
 {
   "nlp": "ONLINE",
   "stt": "ONLINE",
-  "speaker": "ONLINE",
-  "hotword": "ONLINE",
-  "mqtt": "ONLINE",
   "tts": "ONLINE",
   "utils": "ONLINE"
 }
@@ -108,7 +116,7 @@ Respuesta:
 ### POST /nlp/query
 
 Procesa una consulta NLP y devuelve la respuesta generada.
-
+**Headers requeridos:**Authorization: Bearer {token}
 Cuerpo de la solicitud:
 
 ```json
@@ -130,15 +138,61 @@ Respuesta:
 }
 ```
 
+### POST /nlp/recommendations
+
+Genera exactamente 3 recomendaciones de destinos turísticos basadas en las preferencias del usuario y las guarda automáticamente en la base de datos.
+**Headers requeridos:**Authorization: Bearer {token}
+**Cuerpo de la solicitud:**
+
+````json
+{
+"prompt": "string",
+"userId": "string"
+}
+
+**Ejemplo de solicitud:**
+
+```json{
+"prompt": "¿Qué destinos me recomiendas para vacaciones?",
+"userId": "1c9d0149-1288-42dc-931f-27cab21fbc46"
+}
+
+**Respuesta exitosa (200 OK):**
+
+```json{
+"recommendations": [
+    {
+      "destinationId": "9d218366-546b-4253-bb99-304ab116cf78",
+      "userId": "1c9d0149-1288-42dc-931f-27cab21fbc46",
+      "tipo": "basado_en_preferencias",
+      "aceptada": false
+    },
+    {
+      "destinationId": "c7407f83-3923-4623-9363-3e5e67ea83e9",
+      "userId": "1c9d0149-1288-42dc-931f-27cab21fbc46",
+      "tipo": "basado_en_presupuesto",
+      "aceptada": false
+    },
+    {
+      "destinationId": "b7349b99-8d5b-4068-ae50-f50f731d4f1d",
+      "userId": "1c9d0149-1288-42dc-931f-27cab21fbc46",
+      "tipo": "basado_en_categoria",
+      "aceptada": false
+    }
+  ]
+}
+
 ### POST /stt/transcribe
 
 Convierte voz a texto usando el módulo STT.
 
 Cuerpo de la solicitud:
 
-```
+````
+
 audio_file: UploadFile
-```
+
+````
 
 Respuesta:
 
@@ -146,7 +200,7 @@ Respuesta:
 {
   "text": "string"
 }
-```
+````
 
 ## Estructura del Proyecto
 

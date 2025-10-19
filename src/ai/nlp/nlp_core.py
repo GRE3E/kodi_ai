@@ -27,7 +27,7 @@ logger = logging.getLogger("NLPModule")
 PREFERENCE_MARKERS_REGEX = re.compile(r"(preference_set:)")
 ACCEPTANCE_PHRASES_REGEX = re.compile(r"\b(aceptar|sí|ok|confirmar|si|perfecto|excelente)\b|\bagend[a-z]*\b|\b(usa mis datos|registra en mi agenda|guardalo)\b", re.IGNORECASE)
 RECOMMENDATION_JSON_REGEX = re.compile(
-    r"(?:GENERAR_RECOMENDACION_JSON:\s*({.*?})|```json\s*({.*?})\s*```)",
+    r"(?:GENERAR_RECOMENDACION_JSON|Generar_recomendacion_JSON):\s*({.*?})",
     re.DOTALL | re.IGNORECASE
 )
 
