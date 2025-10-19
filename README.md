@@ -2,7 +2,10 @@
 
 ## Descripción
 
-Es un asistente virtual diseñado para ayudar a los turistas a planificar sus viajes, obtener información sobre lugares turísticos, y proporcionar recomendaciones personalizadas. Utiliza procesamiento de lenguaje natural (NLP), reconocimiento de voz (STT y Speaker Recognition), síntesis de voz (TTS), detección de hotword y comunicación con dispositivos IoT a través de MQTT.
+Es un asistente virtual diseñado para ayudar a los turistas a planificar sus viajes, obtener información sobre lugares turísticos y proporcionar recomendaciones personalizadas.  
+Utiliza procesamiento de lenguaje natural (NLP), reconocimiento de voz (STT y Speaker Recognition), síntesis de voz (TTS), detección de hotword y comunicación con dispositivos IoT a través de MQTT.
+
+---
 
 ## Requisitos (actualizar)
 
@@ -11,78 +14,91 @@ Es un asistente virtual diseñado para ayudar a los turistas a planificar sus vi
 - Dependencias listadas en `requirements.txt`
 - Modelos de Whisper (se descargarán automáticamente al usar el módulo STT)
 
+---
+
 ## Instalación
 
-1.  **Crear y activar entorno virtual:**
+### 1. Crear y activar entorno virtual
 
-    ```powershell
-    python -m venv .venv
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; ./.venv/Scripts/Activate.ps1
-    ```
+```powershell
+python -m venv .venv
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; ./.venv/Scripts/Activate.ps1
+```
 
-2.  **Instalar dependencias:**
+### 2. Instalar dependencias
 
-    ```powershell
-    pip install -r requirements.txt
-    ```
+```powershell
+pip install -r requirements.txt
+```
 
-3.  **Instalar PyTorch con soporte para CUDA (si se dispone de GPU NVIDIA):**
-    Asegúrate de tener el CUDA Toolkit de NVIDIA instalado en tu sistema. Luego, instala PyTorch con el siguiente comando (ajusta `cu121` a la versión de CUDA que tengas instalada, por ejemplo, `cu118` para CUDA 11.8):
+### 3. Instalar PyTorch con soporte para CUDA (si se dispone de GPU NVIDIA)
 
-    ```powershell
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; ./.venv/Scripts/Activate.ps1; pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-    ```
+Asegúrate de tener el **CUDA Toolkit de NVIDIA** instalado en tu sistema.
+Luego, instala PyTorch con el siguiente comando (ajusta `cu121` a la versión de CUDA que tengas instalada, por ejemplo `cu118` para CUDA 11.8):
 
-4.  **Asegurarse de tener Ollama instalado y el modelo descargado (para NLP):**
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; ./.venv/Scripts/Activate.ps1; pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
 
-    ```powershell
-    ollama list  # Verificar que el modelo está instalado
-    ```
+### 4. Asegurar que Ollama esté instalado y el modelo descargado
 
-5.  **El sistema utiliza la variable de entorno OLLAMA_OPTIONS para configurar los parámetros del modelo de NLP:**
+```powershell
+ollama list  # Verificar que el modelo está instalado
+```
 
-        ```json
-        {
-        "assistant_name": "KODI",
-        "language": "es",
-        "model": {
-            "name": "qwen2.5:3b-instruct",
-            "temperature": 0.3,
-            "top_p": 0.9,
-            "top_k": 40,
-            "repeat_penalty": 1.1,
-            "num_ctx": 8192,
-            "max_tokens": 1024
-        },
-        "timezone": "America/Bogota"
-        }
+### 5. Configurar variable de entorno `OLLAMA_OPTIONS`
 
-        ```
+Ejemplo de configuración (archivo `.env` o variable del sistema):
+
+```json
+{
+  "assistant_name": "KODI",
+  "language": "es",
+  "model": {
+    "name": "qwen2.5:3b-instruct",
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "top_k": 40,
+    "repeat_penalty": 1.1,
+    "num_ctx": 8192,
+    "max_tokens": 1024
+  },
+  "timezone": "America/Bogota"
+}
+```
+
+---
 
 ## Uso
 
-1.  **Iniciar el servidor:**
+### 1. Iniciar el servidor
 
-    ```powershell
-    uvicorn src.main:app --reload
-    ```
+```powershell
+uvicorn src.main:app --reload
+```
 
-    **Nota:** El servidor de Ollama se iniciará automáticamente en segundo plano cuando la aplicación se inicie. No es necesario ejecutar `ollama serve` manualmente.
+> **Nota:** El servidor de Ollama se iniciará automáticamente en segundo plano al arrancar la aplicación.
+> No es necesario ejecutar `ollama serve` manualmente.
 
-2.  **El servidor estará disponible en:**
+### 2. Acceder a la API
 
-    - API: `http://127.0.0.1:8000`
-    - Documentación: `http://127.0.0.1:8000/docs`
+- **API base:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+- **Documentación:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+---
 
 ## Endpoints
 
-Los endpoints de la API están definidos en el directorio `src/api/` y se agrupan por funcionalidad. Puedes explorar la documentación interactiva en `http://127.0.0.1:8000/docs` para ver todos los endpoints disponibles y sus esquemas.
+Los endpoints de la API están definidos en el directorio `src/api/` y se agrupan por funcionalidad.
+Puedes explorar la documentación interactiva en `http://127.0.0.1:8000/docs`.
 
-### GET /status
+---
+
+### **GET /status**
 
 Verifica el estado actual de los módulos.
 
-Respuesta:
+**Respuesta:**
 
 ```json
 {
@@ -93,11 +109,13 @@ Respuesta:
 }
 ```
 
-### POST /tts/generate_audio
+---
+
+### **POST /tts/generate_audio**
 
 Genera un archivo de audio a partir de texto usando el módulo TTS.
 
-Cuerpo de la solicitud:
+**Cuerpo de la solicitud:**
 
 ```json
 {
@@ -105,7 +123,7 @@ Cuerpo de la solicitud:
 }
 ```
 
-Respuesta:
+**Respuesta:**
 
 ```json
 {
@@ -113,11 +131,16 @@ Respuesta:
 }
 ```
 
-### POST /nlp/query
+---
+
+### **POST /nlp/query**
 
 Procesa una consulta NLP y devuelve la respuesta generada.
-**Headers requeridos:**Authorization: Bearer {token}
-Cuerpo de la solicitud:
+
+**Headers requeridos:**
+`Authorization: Bearer {token}`
+
+**Cuerpo de la solicitud:**
 
 ```json
 {
@@ -126,7 +149,7 @@ Cuerpo de la solicitud:
 }
 ```
 
-Respuesta:
+**Respuesta:**
 
 ```json
 {
@@ -138,29 +161,38 @@ Respuesta:
 }
 ```
 
-### POST /nlp/recommendations
+---
 
-Genera exactamente 3 recomendaciones de destinos turísticos basadas en las preferencias del usuario y las guarda automáticamente en la base de datos.
-**Headers requeridos:**Authorization: Bearer {token}
+### **POST /nlp/recommendations**
+
+Genera exactamente **3 recomendaciones** de destinos turísticos basadas en las preferencias del usuario y las guarda automáticamente en la base de datos.
+
+**Headers requeridos:**
+`Authorization: Bearer {token}`
+
 **Cuerpo de la solicitud:**
 
-````json
+```json
 {
-"prompt": "string",
-"userId": "string"
+  "prompt": "string",
+  "userId": "string"
 }
+```
 
 **Ejemplo de solicitud:**
 
-```json{
-"prompt": "¿Qué destinos me recomiendas para vacaciones?",
-"userId": "1c9d0149-1288-42dc-931f-27cab21fbc46"
+```json
+{
+  "prompt": "¿Qué destinos me recomiendas para vacaciones?",
+  "userId": "1c9d0149-1288-42dc-931f-27cab21fbc46"
 }
+```
 
-**Respuesta exitosa (200 OK):**
+**Respuesta:**
 
-```json{
-"recommendations": [
+```json
+{
+  "recommendations": [
     {
       "destinationId": "9d218366-546b-4253-bb99-304ab116cf78",
       "userId": "1c9d0149-1288-42dc-931f-27cab21fbc46",
@@ -181,26 +213,29 @@ Genera exactamente 3 recomendaciones de destinos turísticos basadas en las pref
     }
   ]
 }
+```
 
-### POST /stt/transcribe
+---
+
+### **POST /stt/transcribe**
 
 Convierte voz a texto usando el módulo STT.
 
-Cuerpo de la solicitud:
+**Cuerpo de la solicitud:**
 
-````
-
+```
 audio_file: UploadFile
+```
 
-````
-
-Respuesta:
+**Respuesta:**
 
 ```json
 {
   "text": "string"
 }
-````
+```
+
+---
 
 ## Estructura del Proyecto
 
