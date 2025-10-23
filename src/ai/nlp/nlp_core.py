@@ -216,6 +216,11 @@ class NLPModule:
         client = AsyncClient(host="http://localhost:11434")
 
         user_conversation_history = self._user_manager.load_conversation_history(userId)
+        
+        # NUEVO: Limitar historial a los últimos 6 mensajes para evitar context overflow
+        if len(user_conversation_history) > 6:
+            logger.info(f"Historial tiene {len(user_conversation_history)} mensajes, limitando a últimos 6")
+            user_conversation_history = user_conversation_history[-6:]
 
         timezone = self._config.get("timezone", "UTC")
         current_datetime = get_current_datetime(timezone)
@@ -226,7 +231,18 @@ class NLPModule:
         user_budget = user_preferences_dict.get("preferencia_precio")
         available_destinations = []
         if user_budget is not None:
-            available_destinations = json.dumps(get_destinations_by_budget(user_budget))
+            all_destinations = get_destinations_by_budget(user_budget)
+            # NUEVO: Limitar a 20 destinos más relevantes para evitar context overflow
+            logger.info(f"Total de destinos disponibles: {len(all_destinations)}, limitando a 20")
+            filtered_destinations = all_destinations[:20]
+            available_destinations = json.dumps(filtered_destinations, ensure_ascii=False)
+        else:
+            # Si no hay presupuesto, obtener todos pero limitados
+            from src.utils.destination_api import get_destinations_by_budget
+            all_destinations = get_destinations_by_budget(float('inf'))
+            logger.info(f"Sin presupuesto definido. Total de destinos: {len(all_destinations)}, limitando a 20")
+            filtered_destinations = all_destinations[:20]
+            available_destinations = json.dumps(filtered_destinations, ensure_ascii=False)
 
         system_prompt = create_system_prompt(
             config=self._config,
