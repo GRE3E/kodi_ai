@@ -238,7 +238,6 @@ class NLPModule:
             available_destinations = json.dumps(filtered_destinations, ensure_ascii=False)
         else:
             # Si no hay presupuesto, obtener todos pero limitados
-            from src.utils.destination_api import get_destinations_by_budget
             all_destinations = get_destinations_by_budget(float('inf'))
             logger.info(f"Sin presupuesto definido. Total de destinos: {len(all_destinations)}, limitando a 20")
             filtered_destinations = all_destinations[:20]
